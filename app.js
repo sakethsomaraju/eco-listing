@@ -1,5 +1,5 @@
 const express = require("express")
-
+const DataCache = require('./cache')
 const scrapeData = require('./index')
 const app = express()
 const PORT =  process.env.PORT || 3000
@@ -12,6 +12,12 @@ const PORT =  process.env.PORT || 3000
 
 */
 
+const tacticsCache = new DataCache(scrapeData);
+
+
+
+
+//---------------------------------------------------------------------------------------------------------
 
 /* 
      without parameter
@@ -23,12 +29,29 @@ const PORT =  process.env.PORT || 3000
 
 */
 
+
+//----without cache implementation----
+// app.get('/',async(req,res)=>{
+    
+//     const tactics =await scrapeData()
+//     res.send(tactics)
+// })
+
+
+
+//-----with cache implementation-----
 app.get('/',async(req,res)=>{
     
-    const tactics =await scrapeData()
-    res.send(tactics)
-})
-//--------------------------------------------------------------------------
+        const tactics = await tacticsCache.getData()
+        res.send(tactics)
+    })
+//------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 /*
     takes a tactic code as a parameter and returns the moves of that corresponding tactic code
 
@@ -36,11 +59,35 @@ app.get('/',async(req,res)=>{
 
 
 */
+
+
+//----without cache implementation----
+
+// app.get('/:code',async(req,res)=>{
+//     try{
+//         const tactics =await scrapeData()
+//         const code = req.params.code.toString()
+//         if(code[0]>='A' && code[0]<='E'){
+//             tactics.forEach(element => {
+//                 if(element.k == code) res.send(element.v)
+//             });
+//         }
+    
+//        else res.send("<h1>enter  valid code <h1>")
+//     }catch(err){
+//         console.log(err)
+//     }
+
+// })
+
+
+
+//-----with cache implementation-----
 app.get('/:code',async(req,res)=>{
     try{
-        const tactics =await scrapeData()
+        const tactics = await tacticsCache.getData()
         const code = req.params.code.toString()
-        if(code[0]>='A' && code[0]<='E'){
+        if(code[0]>='A' && code[0]<='E' && code[1]>='0' && code[1]<='9' && code[2]>='0' && code[2]<='9'){
             tactics.forEach(element => {
                 if(element.k == code) res.send(element.v)
             });
