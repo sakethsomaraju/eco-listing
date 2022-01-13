@@ -4,11 +4,38 @@ const scrapeData = require('./index')
 const app = express()
 const PORT = 3000 || process.env.PORT
 
+/*
+        used express npm package to intialise express server
+
+        handles 2 requests 
+
+
+*/
+
+
+/* 
+     without parameter
+     sends all tactics data in the javascript object array format with object members as follows:
+
+    "k": corresponding code (ex:A00)
+    "v":corresponding moves
+    "name":corresponding tactic name
+
+*/
+
 app.get('/',async(req,res)=>{
     
     const tactics =await scrapeData()
     res.send(tactics)
 })
+//--------------------------------------------------------------------------
+/*
+    takes a tactic code as a parameter and returns the moves of that corresponding tactic code
+
+    if that particular tactic code  (parameter) is not present handles it and displays error message.
+
+
+*/
 app.get('/:code',async(req,res)=>{
     try{
         const tactics =await scrapeData()
