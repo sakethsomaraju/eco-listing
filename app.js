@@ -99,6 +99,21 @@ app.get('/:code',async(req,res)=>{
     }
 
 })
+//-------------------------------------------------------------------------
+
+/*
+
+    constructing computer bot for guessing next move of the tactic play 
+    handling all possible edge cases for error possibilities and returning error messages for wrong requests
+
+
+
+    1.find wether the given tactic code correct or not
+    2.if the tactic code is valid the tackle the entered url and split the url path into the array and verify the path is matching or not 
+    3.if the path is matching then return the next move from the array
+    3.if there is any non-match in the array then return the error message 
+
+*/
 
 app.get('*',async(req,res)=>{
 
