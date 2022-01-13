@@ -100,6 +100,38 @@ app.get('/:code',async(req,res)=>{
 
 })
 
+app.get('*',async(req,res)=>{
+
+    const path = req.params['0'].split('/')
+    const tactics = await tacticsCache.getData()
+    let moves
+    if(path[1][0]>='A' && path[1][0]<='E' && path[1][1]>='0' && path[1][1]<='9' && path[1][2]>='0' && path[1][2]<='9'){
+        tactics.forEach(element => {
+            if(element.k == path[1]) {
+                moves = element.v.split(' ')
+                let newMoves = []
+                // console.log(moves)
+                for(i=0;i<moves.length;i++){
+                    if(i%3!=0){
+                        newMoves.push(moves[i])
+                    }
+                }
+                let urlLength = path.length-2
+                for(i=0;i<urlLength;i++){
+                    if(newMoves[i]!=path[i+2]) return res.send("Enter valid moves")
+                }
+                // console.log(newMoves)
+                // console.log(path)
+                // console.log(moves[urlLength+Math.floor(urlLength/2)+1])
+                res.send(moves[urlLength+Math.floor(urlLength/2)+1])
+
+            }
+        });
+    }
+    else res.send("<h1>enter  valid code <h1>")
+})
+
+
 app.listen(PORT,()=>{
     console.log('app is running on',PORT)
 })
